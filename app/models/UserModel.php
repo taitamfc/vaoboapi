@@ -1,8 +1,6 @@
 <?php
-/**
-* UserModel
-*/
-class UserModel
+include SYSTEM . 'BaseModel.php';
+class UserModel extends BaseModel
 {
     public function getUsers()
     {

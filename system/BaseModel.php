@@ -1,0 +1,9 @@
+<?php
+/**
+* BaseController
+*/
+
+class BaseModel
+{
+    
+}
