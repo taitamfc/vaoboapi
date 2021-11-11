@@ -5,7 +5,7 @@ include SYSTEM . 'BaseController.php';
 /**
 * Default Controller
 */
-class DefaultController extends BaseController
+class DoiDauController extends BaseController
 {
     public function index()
     {

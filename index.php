@@ -1,6 +1,9 @@
 <?php
 // Define Constants
+//error_reporting(0);
+
 include 'system/config.php';
+include 'system/helper.php';
 
 // Get Controller
 if (!isset($_GET['c'])) {
