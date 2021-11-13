@@ -34,4 +34,7 @@ class BaseModel
         $this->_db->where ('id', $id);
         $this->_db->update ($this->_table, $data);
     }
+    public function sanitize_title($title){
+        return $title;
+    }
 }

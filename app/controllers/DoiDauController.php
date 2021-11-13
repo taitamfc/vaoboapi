@@ -12,4 +12,29 @@ class DoiDauController extends BaseController
         $res['msg'] = __METHOD__;
       	$this->resJson($res,1);
     }
+
+    public function cronAll()
+    {
+        $this->crawAll();
+    }
+    public function cronDetail()
+    {
+        $this->crawDetail();
+    }
+
+    public function crawAll(){
+    	$objModel 	= $this->loadModel('DoiDauModel');
+      	$items 		= $objModel->apiGetAll();
+      	$objModel->saveAll($items);
+
+    	$res['msg'] = __METHOD__;
+      	$this->resJson($res,1);
+    }
+    public function crawDetail(){
+    	$objModel 	= $this->loadModel('DoiDauModel');
+    	$return 	= $objModel->apiGetDetail();
+
+    	pr($return);
+    	die();
+    }
 }
