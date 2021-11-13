@@ -39,7 +39,14 @@ class DoiDauModel extends BaseModel
     /* API */
     public function apiGetAll(){
     	$objLibrary = $this->loadLibrary('SourceFcTables');
-    	$items = $objLibrary->getAll();
+    	
+        if( isset( $_SESSION['DoiDau_apiGetAll'] ) ){
+            return $_SESSION['DoiDau_apiGetAll'];
+        }else{
+            $items = $objLibrary->getAll();
+            $_SESSION['DoiDau_apiGetAll'] = $items;
+        }       
+
         return $items;
     }
 
@@ -49,15 +56,12 @@ class DoiDauModel extends BaseModel
             $item    = $this->_db->ObjectBuilder()->getOne($this->_table);
             $link   = $item->link;
         }
-
-
+        
+        if(!$link) return false;
 
         $objLibrary = $this->loadLibrary('SourceFcTables');
         $data = $objLibrary->find($link);
 
-        pr($data);
-        die();
-        
         $return['data'] = $data;
         $return['id']   = $item->id;
 

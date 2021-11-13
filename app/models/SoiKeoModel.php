@@ -19,6 +19,12 @@ class SoiKeoModel extends BaseModel
         }
 		return $items;	
     }
+    public function find($id){
+        $this->_db->where ('id', $id);
+        $item = $this->_db->ObjectBuilder()->getOne($this->_table);
+        $item->body = json_decode($item->body);
+        return $item;
+    }
     public function saveAll($items){
     	foreach ($items['items'] as $data) {
             $e = $this->_getItemBySourceId($data['source_id']);
@@ -39,7 +45,13 @@ class SoiKeoModel extends BaseModel
     /* API */
     public function apiGetAll(){
     	$objLibrary = $this->loadLibrary('SourceSoccerpet');
-    	$items = $objLibrary->getAllPredictions();
+    	
+        if( isset( $_SESSION['SoiKeo_apiGetAll'] ) ){
+            return $_SESSION['SoiKeo_apiGetAll'];
+        }else{
+            $items = $objLibrary->getAll();
+            $_SESSION['SoiKeo_apiGetAll'] = $items;
+        }  
 
     	$leagues = [];
         foreach( $items as $key => $item ){
@@ -65,6 +77,8 @@ class SoiKeoModel extends BaseModel
             $item    = $this->_db->ObjectBuilder()->getOne($this->_table);
             $link   = $item->link;
         }
+
+        if(!$link) return false;
 
         $objLibrary = $this->loadLibrary('SourceSoccerpet');
         $data = $objLibrary->find($link);

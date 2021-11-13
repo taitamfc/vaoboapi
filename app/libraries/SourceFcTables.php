@@ -233,8 +233,8 @@ class SourceFcTables {
 	}
 
 	private function _generate_link($home,$away){
-		$home_slug = $this->sanitize_title($home);
-		$away_slug = $this->sanitize_title($away);
+		$home_slug = sanitize_title($home);
+		$away_slug = sanitize_title($away);
 		return '/h2h/'.$home_slug.'/'.$away_slug.'/';
 	}
 	private function _format_team($team){

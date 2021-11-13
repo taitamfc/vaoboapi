@@ -24,6 +24,7 @@ class DoiDauController extends BaseController
 
     public function crawAll(){
     	$objModel 	= $this->loadModel('DoiDauModel');
+
       	$items 		= $objModel->apiGetAll();
       	$objModel->saveAll($items);
 
@@ -33,8 +34,16 @@ class DoiDauController extends BaseController
     public function crawDetail(){
     	$objModel 	= $this->loadModel('DoiDauModel');
     	$return 	= $objModel->apiGetDetail();
+        $data       = $return['data'];
 
-    	pr($return);
-    	die();
+        if(!$return){
+            $this->resJson(['msg'=>'Job done'],1);
+        }
+
+        $data['crawled']= 1;
+        $objModel->update($return['id'],$data);
+
+        $res['msg'] = 'Crawled '.$return['id'];
+        $this->resJson($res,1);
     }
 }

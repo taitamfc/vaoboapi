@@ -17,13 +17,13 @@ class SourceAskbettor {
 		die();
 		
 	}
-	public function getAllPredictions(){
+	public function getAll(){
 		$objCurl = new cUrl();
 		$respon = $objCurl->custom_curl($this->predictions_url,false,'cookies-askbettor-com.txt');
 		return json_decode($respon);		
 	}
 
-	public function getPrediction($link){
+	public function find($link){
 
 		$objCurl = new cUrl();
 		$respon = $objCurl->custom_curl($this->prediction_url.$link.'?t='.time(),false,'cookies-askbettor-com.txt');

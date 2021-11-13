@@ -138,7 +138,7 @@ class SourceSoccerpet {
 		return $predict;
 	}
 
-	public function getAllPredictions(){
+	public function getAll(){
 		$objCurl = new cUrl();
 		$respon = $objCurl->custom_curl($this->predictions_url,false,'cookies-soccerpet-com.txt');
 		if(!$respon) return [];
