@@ -1,7 +1,7 @@
 <?php
 // Define Constants
-//error_reporting(0);
-
+error_reporting(0);
+session_start();
 include 'system/config.php';
 include 'system/helper.php';
 

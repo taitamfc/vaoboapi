@@ -13,6 +13,9 @@ class BaseController
      */
     public function resJson($data,$status = 1){
         $data['status'] = $status;
+        if( isset($data['items']) ){
+            $data['count']  = count($data['items']);
+        }        
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($data);
         die();
