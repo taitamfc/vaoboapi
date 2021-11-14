@@ -15,7 +15,8 @@ class BaseController
         $data['status'] = $status;
         if( isset($data['items']) ){
             $data['count']  = count($data['items']);
-        }        
+        }
+		header("Access-Control-Allow-Origin: *");
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($data);
         die();

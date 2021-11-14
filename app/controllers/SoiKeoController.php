@@ -11,9 +11,7 @@ class SoikeoController extends BaseController
     {
        $objModel 	= $this->loadModel('SoiKeoModel');
        $items 		= $objModel->getAll();
-       $return = [
-       		'items'  => $items,
-       ];
+       $return = [ 'items'  => $items ];
        $this->resJson($return,1);
     }
 
@@ -22,9 +20,7 @@ class SoikeoController extends BaseController
        $id       = (isset( $_GET['id'] )) ? $_GET['id'] : 0;
        $objModel = $this->loadModel('SoiKeoModel');
        $item     = $objModel->find($id);
-       $return = [
-            'item'  => $item,
-       ];
+       $return = [ 'item'  => $item ];
        $this->resJson($return,1);
     }
 

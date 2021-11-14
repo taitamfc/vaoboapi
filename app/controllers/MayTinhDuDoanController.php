@@ -11,9 +11,16 @@ class MayTinhDuDoanController extends BaseController
     {
        $objModel 	= $this->loadModel('MayTinhDuDoanModel');
        $items 		= $objModel->getAll();
-       $return = [
-       		'items'  => $items,
-       ];
+       $return = [ 'items'  => $items ];
+       $this->resJson($return,1);
+    }
+	
+	public function viewMatch()
+    {
+       $match_id       = (isset( $_GET['match_id'] )) ? $_GET['match_id'] : 0;
+       $objModel = $this->loadModel('MayTinhDuDoanModel');
+       $item     = $objModel->findByMatchId($match_id);
+       $return = [ 'item'  => $item ];
        $this->resJson($return,1);
     }
 

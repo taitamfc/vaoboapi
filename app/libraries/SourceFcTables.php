@@ -154,8 +154,6 @@ class SourceFcTables {
 				}
 				
 				$game_date = $game_html->find('time[itemprop="startDate"]',0)->attr['datetime'];
-				$game_date = date('Y-m-d H:i:s',strtotime($game_date) + 7*60*60);
-				
 				$game = [
 					
 					'gres' => $gres,
@@ -203,7 +201,6 @@ class SourceFcTables {
 
 		
 		$start_date 	= $html->find('.game_date.date_unix',0)->attr['data-unixtime'];
-		$start_date 	= date('Y-m-d H:i:s',$start_date + 7*60*60);
 		$home_logo 		= $html->find('.gnbox.home img',0)->attr['src'];
 		$away_logo 		= $html->find('.gnbox.away img',0)->attr['src'];
 		$league_name 	= $html->find('.h2h_league_name a',0)->innertext;
@@ -254,9 +251,7 @@ class SourceFcTables {
 		$away 	=  $h2h_html->find('a[data-toggle="tooltip"] span.away',0)->innertext;
 		$slug 	= $h2h_html->find('a[data-toggle="tooltip"]',0)->attr['href'];
 		$start_date = $h2h_html->find('div.game_date',0)->attr['data-unixtime'];
-		$start_date = date('Y-m-d H:i:s',$start_date);
-		$start_date = date('Y-m-d H:i:s',strtotime($start_date) + 7*60*60);
-		//$start_date = date('Y-m-d H:i:s',strtotime($start_date) );
+		
 
 		$h2h_game = [
 			'start_date' => $start_date,

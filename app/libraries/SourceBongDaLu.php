@@ -357,7 +357,6 @@ class SourceBongDaLu {
 			if( count($cols) > 30 ){
 				//$games[] = $cols;
 				$start_date = str_replace("'","",$cols[6]);
-				$start_date = date('Y-m-d H:i:s', strtotime( $start_date ) + 7*60*60 );
 				$games[] = [
 					'match_id' 		=> $cols[0],
 					'home_name' 	=> strip_tags(str_replace("'","",$cols[4])),

@@ -9,8 +9,10 @@ class DoiDauController extends BaseController
 {
     public function index()
     {
-        $res['msg'] = __METHOD__;
-      	$this->resJson($res,1);
+       $objModel   = $this->loadModel('DoiDauModel');
+       $items       = $objModel->getAll();
+       $return = [ 'items'  => $items ];
+       $this->resJson($return,1);
     }
 
     public function cronAll()
@@ -24,7 +26,6 @@ class DoiDauController extends BaseController
 
     public function crawAll(){
     	$objModel 	= $this->loadModel('DoiDauModel');
-
       	$items 		= $objModel->apiGetAll();
       	$objModel->saveAll($items);
 

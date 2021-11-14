@@ -2,6 +2,8 @@
 // Define Constants
 error_reporting(0);
 session_start();
+session_destroy();
+date_default_timezone_set('Asia/Ho_Chi_Minh');
 include 'system/config.php';
 include 'system/helper.php';
 

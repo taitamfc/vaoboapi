@@ -12,6 +12,9 @@ class SoiKeoModel extends BaseModel
     /* MODEL */
     public function getAll(){
     	$cols = [];
+
+        $this->_db->where('game_date_origin',date('Y-m-d H:00:00' ,strtotime('-1 hour') ),'>=');
+        $this->_db->orderBy('id','ASC');
 		$items = $this->_db->ObjectBuilder()->get ($this->_table,null,$cols);
 
         foreach ($items as $item) {
@@ -60,8 +63,8 @@ class SoiKeoModel extends BaseModel
             $objLeague->league_name = $item['league_name'];
             $leagues[$objLeague->league_id] = $objLeague;
 			
-			$items[$key]['game_date_origin'] = date('Y-m-d H:i',strtotime( $items[$key]['game_date'] ) + $this->_add_time);
-            $items[$key]['game_date'] = date('d/m H:i',strtotime( $items[$key]['game_date'] ) + $this->_add_time);			
+			$items[$key]['game_date_origin'] = date('Y-m-d H:i',strtotime( $items[$key]['game_date'] ));
+            $items[$key]['game_date'] = date('d/m H:i',strtotime( $items[$key]['game_date_origin'] ) );			
         }
         $return = [
             'leagues'   => $leagues,

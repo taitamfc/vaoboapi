@@ -1,0 +1,906 @@
+<div id="app_shortcode_filter_detail">
+	<div v-if="isRunning" class="loading-chitiet-dd">
+		<span class="loadicon active"></span>
+		<p>Đang tải dữ liệu</p>
+	</div>
+	<div class="box-chitiet-sieumaytinh"  v-if="item">
+		<div class="sstop" >
+			<div class="bxinner">
+				<h1>Siêu máy tính dự đoán tỷ số và kèo tài xỉu trận {{ item.name }}</h1>
+				<div class="des">
+					<p>Máy tính chọn kèo {{ item.name }} dựa vào các dữ liệu của trận đấu như phong độ hiện tại, thành tích đối đầu của {{ item.name }} để từ đó đưa ra kèo và tỷ số trận đấu chính xác nhất.</p>
+				</div>
+			</div>
+		</div>
+		<div id="ket-qua " class="flex-four-box ket-qua cards-0" >
+			<div class="bxinner">
+				<h2 class="text-normal">Máy tính dự đoán kèo trận đấu {{ item.name }} (Kết quả 90')</h2>
+				<div class="bxflex">
+					<!-- HOME - DRAW - AWAY -->
+					<div id="card-0-0" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">KÈO 1X2</h4>
+						<div class="text-center" v-if="!cards_0_0">
+							<span class="loadicon active"></span>
+						</div>
+						<div id="card"  class="ty-le" v-if="cards_0_0">
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_0_0.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+							</div>
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_0_0.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_0_0.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+						</div>
+						<div class="tyle-odds" v-if="cards_0_0">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-home">
+								<span class="text-right">{{ cards_0_0.home_odds }}</span>
+								<span>HOME</span>
+							</div>
+							<div class="odds-item odds-draw">
+								<span class="text-right">{{ cards_0_0.draw_odds }}</span>
+								<span>DRAW</span>
+							</div>
+							<div class="odds-item odds-away">
+								<span class="text-right">{{ cards_0_0.away_odds }}</span>
+								<span>AWAY</span>
+							</div>
+						</div>
+					</div>
+					<!-- CORRECT SCORE -->
+					<div id="card-0-1" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">TỶ SỐ DỰ ĐOÁN</h4>
+						<div class="text-center" v-if="!cards_0_1">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="ty-so" v-if="cards_0_1">
+							<div class="bxw-75 ty-so-left">
+								<span>{{ cards_0_1.scores_chart[0].score }}</span>
+							</div>
+							<div class="bxw-25 ty-so-right">
+								<div class="top">{{ cards_0_1.scores_chart[1].score }}</div>										
+								<div class="bottom">{{ cards_0_1.scores_chart[2].score }}</div>
+							</div>
+						</div>
+						<div class="tyle-odds" v-if="cards_0_1">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-home" >
+								<span>{{ cards_0_1.first_odd }}</span>
+								<span class="text-right">{{ cards_0_1.scores_chart[0].score }}</span>
+							</div>
+							<div class="odds-item odds-draw">
+								<span>{{ cards_0_1.second_odd }}</span>
+								<span class="text-right">{{ cards_0_1.scores_chart[1].score }}</span>
+							</div>
+							<div class="odds-item odds-away">
+								<span>{{ cards_0_1.third_odd }}</span>
+								<span class="text-right">{{ cards_0_1.scores_chart[2].score }}</span>
+							</div>
+						</div>
+					</div>
+					<!-- ALGORITHM RECOMMENDATION -->
+					<div id="card-0-2" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">MÁY TÍNH DỰ ĐOÁN</h4>
+						<div class="text-center" v-if="!cards_0_2">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="algotithm" v-if="cards_0_2">
+							
+							<h4>{{ cards_0_2.tips_type }}</h4>
+							<div class="value-odds" v-if="cards_0_2">
+								<div class="value">
+									<span>VALUE</span>
+									<span class="number">{{ cards_0_2.value }}</span>
+								</div>
+								<div class="odds">
+									<span>ODDS</span>
+									<span class="number">{{ cards_0_2.odd }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- "HANDICAP" -->
+					<div id="card-0-3" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">ASIAN HANDICAP</h4>
+						<div class="text-center" v-if="!cards_0_3">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="algotithm" v-if="cards_0_3">
+							<h4 style="text-transform: uppercase;" v-if="cards_0_3.low_odds">LOW ODDS</h4>
+							<h4 style="text-transform: uppercase;" v-if="!cards_0_3.low_odds">{{ cards_0_3.tip }}</h4>
+							<div class="value-odds" v-bind:class="{ 'end-flex' : !cards_0_3.low_odds }">
+								<div class="odds" v-if="cards_0_3.low_odds">
+									<span style="text-transform: uppercase;">{{ cards_0_3.tip }}</span>
+								</div>
+								<div class="odds">
+									<span>ODDS</span>
+									<span class="number">{{ cards_0_3.odd }}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="total-ban-thang" class="flex-four-box total-ban-thang cards-0" >
+			<div class="bxinner">
+				<h2 class="text-normal">Máy tính dự đoán kèo tài xỉu trận đấu {{ item.name }}</h2>
+				<div class="bxflex">
+					<!-- BOTH TEAMS TO SCORE -->
+					<div id="card-0-4" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">KÈO HAI ĐỘI GHI BÀN</h4>
+						<div class="text-center" v-if="!cards_0_4">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="keo-hai-doi-ghi-ban box-even-total-banthang" v-if="cards_0_4">
+							<div class="bxw-70 box-left">
+								<span class="percent-num-top big blocks">{{ cards_0_4.btts[0].pctg }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">BTTS-YES</span>
+							</div>
+							<div class="bxw-30 box-right">
+								<span class="percent-num-top small blocks">{{ cards_0_4.btts[1].pctg }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">BTTS-NO</span>
+								<div class="bg-cl"></div>
+							</div>
+						</div>
+						<div class="tyle-odds" v-if="cards_0_4">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-yes">
+								<span>{{ cards_0_4.btts_yes_odd }}</span>
+								<span>{{ cards_0_4.btts[0].title }}</span>
+							</div>
+							<div class="odds-item odds-no">
+								<span>{{ cards_0_4.btts_no_odd }}</span>
+								<span>{{ cards_0_4.btts[1].title }}</span>
+							</div>
+						</div>
+					</div>
+					<!-- OVER / UNDER 1.5 -->
+					<div id="card-0-5" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">TÀI / XỈU 1.5</h4>
+						<div class="text-center" v-if="!cards_0_5">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="tai-xiu box-even-total-banthang" v-if="cards_0_5">
+							<div class="bxw-70 box-left">
+								<span class="percent-num-top big blocks">{{ cards_0_5.over_us_odds }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">OVER 1.5</span>
+							</div>
+							<div class="bxw-30 box-right">
+								<span class="percent-num-top small blocks">{{ cards_0_5.under_us_odds }}%</span>
+								<span class="text-bottom blocks">UNDER 1.5</span>
+								<div class="bg-cl"></div>
+							</div>
+						</div>
+						<div class="tyle-odds" v-if="cards_0_5">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-over">
+								<span>{{ cards_0_5.over_odd }}</span>
+								<span>OVER</span>
+							</div>
+							<div class="odds-item odds-under">
+								<span>{{ cards_0_5.under_odd }}</span>
+								<span>UNDER</span>
+							</div>
+						</div>
+					</div>
+					<!-- OVER / UNDER 2.5 -->
+					<div id="card-0-6" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">TÀI / XỈU 2.5</h4>
+						<div class="text-center" v-if="!cards_0_6">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="tai-xiu box-even-total-banthang" v-if="cards_0_6">
+							<div class="bxw-70 box-left">
+								<span class="percent-num-top big blocks">{{ cards_0_6.over_us_odds }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">OVER 1.5</span>
+							</div>
+							<div class="bxw-30 box-right">
+								<span class="percent-num-top small blocks">{{ cards_0_6.under_us_odds }}%</span>
+								<span class="text-bottom blocks">UNDER 1.5</span>
+								<div class="bg-cl"></div>
+							</div>
+						</div>
+						<div class="tyle-odds" v-if="cards_0_6">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-over">
+								<span>{{ cards_0_6.over_odd }}</span>
+								<span>OVER</span>
+							</div>
+							<div class="odds-item odds-under">
+								<span>{{ cards_0_6.under_odd }}</span>
+								<span>UNDER</span>
+							</div>
+						</div>
+					</div>
+					<!-- OVER / UNDER 3.5 -->
+					<div id="card-0-7" class="bxw-25 bx-box-item">
+						<h4 class="line-bottom">TÀI / XỈU 3.5</h4>
+						<div class="text-center" v-if="!cards_0_7">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="tai-xiu box-even-total-banthang" v-if="cards_0_7">
+							<div class="bxw-70 box-left">
+								<span class="percent-num-top big blocks">{{ cards_0_7.over_us_odds }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">OVER 1.5</span>
+							</div>
+							<div class="bxw-30 box-right">
+								<span class="percent-num-top small blocks">{{ cards_0_7.under_us_odds }}%</span>
+								<span class="text-bottom blocks">UNDER 1.5</span>
+								<div class="bg-cl"></div>
+							</div>
+						</div>
+						<div class="tyle-odds" v-if="cards_0_7">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-over">
+								<span>{{ cards_0_7.over_odd }}</span>
+								<span>OVER</span>
+							</div>
+							<div class="odds-item odds-under">
+								<span>{{ cards_0_7.under_odd }}</span>
+								<span>UNDER</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="so-lieu-thong-ke" class="flex-four-box so-lieu-thong-ke cards-1" >
+			<div class="bxinner">
+				<h2 class="text-normal">Số liệu thống kê</h2>
+				<div class="bxflex">
+					<div class="bxw-25 bx-box-item bx-box-item-table" v-if="cards_1_0">
+						<h4 class="line-bottom text-uppercase">BXH {{ ( typeof cards_1_0.own_params != 'undefined' ) ? cards_1_0.own_params.league_name : '' }}</h4>
+						<div class="text-center" v-if="!cards_1_0">
+							<span class="loadicon active"></span>
+						</div>
+						<div class="bxh-table" >
+							<table class="" v-if="!cards_1_0.have_rounds">
+								<tr>
+									<th class="stt">POS</th>
+									<th class="doi">ĐỘI</th>
+									<th class="gp">GP</th>
+									<th class="pts">PTS</th>
+								</tr>
+								<tr v-for="(pos, index) of cards_1_0.data">
+									<td>{{ index + 1 }}</td>
+									<td>{{ pos.name }}</td>
+									<td>{{ pos.games_played }}</td>
+									<td>{{ pos.pts }}</td>
+								</tr>
+								
+							</table>
+						</div>
+					</div>
+					<div class="bxw-75 box-solieu-right">
+						<div class="bxflex">
+							<div class="bxw-33 bx-box-item">
+								<div class="box-current-league-form ">
+									<h4 class="line-bottom">MÙA GIẢI HIỆN TẠI</h4>
+									<div class="text-center" v-if="!cards_1_1">
+										<span class="loadicon active"></span>
+									</div>
+									<div class="list-w-l fc-one" v-if="cards_1_1">
+										<ul>
+											<li 
+												v-for="game of cards_1_1.home_team_games"
+												v-bind:title="game.title"
+												v-bind:class="get_game_class(game.result)"
+												>{{ game.result }}</li>
+										</ul>
+										<p class="name-fc">{{ cards_1_1.home_team }}</p>
+									</div>
+									<div class="list-w-l fc-two" v-if="cards_1_1">
+										<ul>
+											<li 
+												v-for="game of cards_1_1.away_team_games"
+												v-bind:title="game.title"
+												v-bind:class="get_game_class(game.result)"
+												>{{ game.result }}</li>
+										</ul>
+										<p class="name-fc">{{ cards_1_1.away_team }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="bxw-33 bx-box-item">
+								<div class="text-center" v-if="!cards_1_2">
+									<span class="loadicon active"></span>
+								</div>
+								<div class="box-previous-fc" v-if="cards_1_2">
+									<h4 class="line-bottom">THÀNH TÍCH GẦN ĐÂY - {{ cards_1_2.team }} </h4>
+									<div class="text-center" v-if="!cards_1_2">
+										<span class="loadicon active"></span>
+									</div>
+									<div class="list-head-to-head">
+										<ul>
+											<li 
+											v-for="game of cards_1_2.games"
+											class="items">
+												<div class="history-head-to-head">
+													<span class="name-fc fc-lose"
+													v-bind:class="{ 'fc-win' : (game.home_team == cards_1_2.team) }"
+													>{{ game.home_team }}</span>
+													<span class="score">{{ game.home_goals }} : {{ game.quest_goals }}</span>
+													<span class="name-fc fc-details"
+													v-bind:class="{ 'fc-win' : (game.quest_team == cards_1_2.team) }"
+													>{{ game.quest_team }}</span>
+												</div>
+												<p class="date-time-head-to-head">{{ app_format_date(game.game_date) }}, {{ game.league }}, {{ game.predictions }}</p>
+											</li>
+										
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="bxw-33 bx-box-item">
+								<div class="text-center" v-if="!cards_1_3">
+									<span class="loadicon active"></span>
+								</div>
+								<div class="box-previous-fc" v-if="cards_1_3">
+									<h4 class="line-bottom">THÀNH TÍCH GẦN ĐÂY - {{ cards_1_3.team }}</h4>
+									<div class="list-head-to-head">
+										<ul>
+											<li 
+											v-for="game of cards_1_3.games"
+											class="items">
+												<div class="history-head-to-head">
+													<span class="name-fc fc-lose"
+													v-bind:class="{ 'fc-win' : (game.home_team == cards_1_3.team) }"
+													>{{ game.home_team }}</span>
+													<span class="score">{{ game.home_goals }} : {{ game.quest_goals }}</span>
+													<span class="name-fc fc-details"
+													v-bind:class="{ 'fc-win' : (game.quest_team == cards_1_3.team) }"
+													>{{ game.quest_team }}</span>
+												</div>
+												<p class="date-time-head-to-head">{{ app_format_date(game.game_date) }}, {{ game.league }}, {{ game.predictions }}</p>
+											</li>
+										
+										</ul>
+									</div>
+								</div>
+							</div>
+						
+							<div class="bxw-33 bx-box-item">
+								<div class="box-head-to-head" >
+									<h4 class="line-bottom">LỊCH SỬ ĐỐI ĐẦU</h4>
+									<div class="text-center" v-if="!cards_1_4">
+										<span class="loadicon active"></span>
+									</div>
+									<div class="list-history-game" v-if="cards_1_4">
+										<ul>
+											<li class="win-game">{{ cards_1_4.home_win }} WINS</li>
+											<li class="draw-game">{{ cards_1_4.draw }} DRAW</li>
+											<li class="lose-game">{{ cards_1_4.away_win }} WINS</li>
+										</ul>
+									</div>
+									<div class="list-head-to-head" v-if="cards_1_4">
+										<ul>
+											<li v-for="matche of cards_1_4.matches" class="items">
+												<div class="history-head-to-head">
+													<span class="name-fc fc-lose"
+													v-bind:class="{ 'fc-win' : (matche.home_goals > matche.quest_goals) }"
+													>{{ matche.home_team }}</span>
+													<span class="score">{{ matche.home_goals }} : {{ matche.quest_goals }}</span>
+													<span class="name-fc"
+													v-bind:class="{ 'fc-win' : (matche.home_goals < matche.quest_goals) }"
+													>{{ matche.quest_team }}</span>
+												</div>
+												<p class="date-time-head-to-head">{{ app_format_date(matche.game_date) }}, {{ matche.league }}</p>
+											</li>
+											
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="bxw-33 bx-box-item">
+								<div class=" box-compare-fc">
+									<h4 class="line-bottom">SO SÁNH KẾT QUẢ</h4>
+									<div class="text-center" v-if="!cards_1_5">
+										<span class="loadicon active"></span>
+									</div>
+									<div class="name-fc-compare" v-if="cards_1_5">
+										<span class="name-fc">
+											{{ cards_1_5.home_team }}
+										</span>
+										<span class="name-fc">
+											{{ cards_1_5.away_team }}
+										</span>
+									</div>
+									<div class="box-list-history-fc" v-if="cards_1_5">
+										<ul class="list-history-fc">
+											<li class="items wons">
+												<span class="number">{{ cards_1_5.home_team_wins }}</span>
+												<span class="status">WON</span>
+											</li>
+											<li class="items draws">
+												<span class="number">{{ cards_1_5.home_team_draw }}</span>
+												<span class="status">DRAW</span>
+											</li>
+											<li class="items loses">
+												<span class="number">{{ cards_1_5.home_team_lost }}</span>
+												<span class="status">LOST</span>
+											</li>
+										</ul>
+										<ul class="list-history-fc" v-if="cards_1_5">
+											<li class="items wons">
+												<span class="number">{{ cards_1_5.away_team_wins }}</span>
+												<span class="status">WON</span>
+											</li>
+											<li class="items draws">
+												<span class="number">{{ cards_1_5.away_team_draw }}</span>
+												<span class="status">DRAW</span>
+											</li>
+											<li class="items loses">
+												<span class="number">{{ cards_1_5.away_team_lost }}</span>
+												<span class="status">LOST</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="bxw-33 bx-box-item">
+								<div class=" box-compare-fc">
+									<h4 class="line-bottom">TỈ LỆ BÀN THẮNG</h4>
+									<div class="text-center" v-if="!cards_1_6">
+										<span class="loadicon active"></span>
+									</div>
+									<div class="name-fc-compare" v-if="cards_1_6">
+										<span class="name-fc">
+											{{ cards_1_6.home_team }}
+										</span>
+										<span class="name-fc">
+											{{ cards_1_6.away_team }}
+										</span>
+									</div>
+									<div class="box-list-averate-goal box-list-history-fc" v-if="cards_1_6">
+										<ul class="list-history-fc">
+											<li class="items scored">
+												<span class="number">{{ cards_1_6.hteam_goals }}</span>
+												<span class="status">SCORED</span>
+											</li>
+											<li class="items conecded">
+												<span class="number">{{ cards_1_6.hteam_conceeded }}</span>
+												<span class="status">CONCEDED</span>
+											</li>
+										</ul>
+										<ul class="list-history-fc">
+											<li class="items scored">
+												<span class="number">{{ cards_1_6.ateam_goals }}</span>
+												<span class="status">SCORED</span>
+											</li>
+											<li class="items conecded">
+												<span class="number">{{ cards_1_6.ateam_conceeded }}</span>
+												<span class="status">CONCEDED</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+
+
+		<div id="du-doan-tuong-tu" class="flex-four-box du-doan-tuong-tu" >
+			<div class="bxinner">
+				<p class="text-normal"><strong>Dự đoán tương tự</strong></p>
+				<div class="bxflex" >
+					<!-- Semilar 0 -->
+					<div v-if="cards_2_0" 
+						class="bxw-25 bx-box-item" 
+						v-bind:class="{'bx-box-item-reserve': cards_2_0.home_win > cards_2_0.draw_win }"
+					>
+						<h4 class="line-bottom"><a v-bind:href="'/chi-tiet-may-tinh-du-doan/?match_id='+cards_2_0.id">{{ cards_2_0.home_team }} vs {{ cards_2_0.away_team }}</a></h4>
+						<div class="ty-le" v-if="cards_2_0.home_win < cards_2_0.draw_win">
+
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_0.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+							
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_0.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_0.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+							</div>
+
+						</div>
+
+						<div class="ty-le" v-if="cards_2_0.home_win >= cards_2_0.draw_win">
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_0.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+							</div>
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_0.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_0.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+						</div>
+
+						<div class="tyle-odds">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-home">
+								<span class="text-right">{{ cards_2_0.home_odds }}</span>
+								<span>HOME</span>
+							</div>
+							<div class="odds-item odds-draw">
+								<span class="text-right">{{ cards_2_0.draw_odds }}</span>
+								<span>DRAW</span>
+							</div>
+							<div class="odds-item odds-away">
+								<span class="text-right">{{ cards_2_0.away_odds }}</span>
+								<span>AWAY</span>
+							</div>
+						</div>
+					</div>
+					<!-- End Semilar 0 -->
+
+					<!-- Semilar 1 -->
+					<div v-if="cards_2_1" 
+						class="bxw-25 bx-box-item" 
+						v-bind:class="{'bx-box-item-reserve': cards_2_1.home_win > cards_2_1.draw_win }"
+					>
+						<h4 class="line-bottom"><a v-bind:href="'/chi-tiet-may-tinh-du-doan/?match_id='+cards_2_1.id">{{ cards_2_1.home_team }} vs {{ cards_2_1.away_team }}</a></h4>
+						<div class="ty-le" v-if="cards_2_1.home_win < cards_2_1.draw_win">
+
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_1.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+							
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_1.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_1.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+							</div>
+
+						</div>
+
+						<div class="ty-le" v-if="cards_2_1.home_win >= cards_2_1.draw_win">
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_1.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+							</div>
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_1.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_1.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+						</div>
+
+						<div class="tyle-odds">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-home">
+								<span class="text-right">{{ cards_2_1.home_odds }}</span>
+								<span>HOME</span>
+							</div>
+							<div class="odds-item odds-draw">
+								<span class="text-right">{{ cards_2_1.draw_odds }}</span>
+								<span>DRAW</span>
+							</div>
+							<div class="odds-item odds-away">
+								<span class="text-right">{{ cards_2_1.away_odds }}</span>
+								<span>AWAY</span>
+							</div>
+						</div>
+					</div>
+					<!-- End Semilar 1 -->
+
+					<!-- Semilar 2 -->
+					<div v-if="cards_2_2" 
+						class="bxw-25 bx-box-item" 
+						v-bind:class="{'bx-box-item-reserve': cards_2_2.home_win > cards_2_2.draw_win }"
+					>
+						<h4 class="line-bottom"><a v-bind:href="'/chi-tiet-may-tinh-du-doan/?match_id='+cards_2_2.id">{{ cards_2_2.home_team }} vs {{ cards_2_2.away_team }}</a></h4>
+						<div class="ty-le" v-if="cards_2_2.home_win < cards_2_2.draw_win">
+
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_2.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+							
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_2.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_2.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+							</div>
+
+						</div>
+
+						<div class="ty-le" v-if="cards_2_2.home_win >= cards_2_2.draw_win">
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_2.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+							</div>
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_2.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_2.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+						</div>
+
+						<div class="tyle-odds">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-home">
+								<span class="text-right">{{ cards_2_2.home_odds }}</span>
+								<span>HOME</span>
+							</div>
+							<div class="odds-item odds-draw">
+								<span class="text-right">{{ cards_2_2.draw_odds }}</span>
+								<span>DRAW</span>
+							</div>
+							<div class="odds-item odds-away">
+								<span class="text-right">{{ cards_2_2.away_odds }}</span>
+								<span>AWAY</span>
+							</div>
+						</div>
+					</div>
+					<!-- End Semilar 2 -->
+
+					<!-- Semilar 3 -->
+					<div v-if="cards_2_3" 
+						class="bxw-25 bx-box-item" 
+						v-bind:class="{'bx-box-item-reserve': cards_2_3.home_win > cards_2_3.draw_win }"
+					>
+						<h4 class="line-bottom"><a v-bind:href="'/chi-tiet-may-tinh-du-doan/?match_id='+cards_2_3.id">{{ cards_2_3.home_team }} vs {{ cards_2_3.away_team }}</a></h4>
+						<div class="ty-le" v-if="cards_2_3.home_win < cards_2_3.draw_win">
+
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_3.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+							
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_3.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_3.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+							</div>
+
+						</div>
+
+						<div class="ty-le" v-if="cards_2_3.home_win >= cards_2_3.draw_win">
+							<div class="win">
+								<span class="percent-num-top blocks">{{ cards_2_3.home_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">HOME WIN</span>
+							</div>
+							<div class="draw percent-num-small">
+								<span class=" blocks">{{ cards_2_3.draw_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">DRAW</span>
+								<div class="bg-cl-draw"></div>
+							</div>
+							<div class="away percent-num-small">
+								<span class=" blocks">{{ cards_2_3.away_win }}<span class="symbol-percent">%</span></span>
+								<span class="text-bottom blocks">AWAY WIN</span>
+								<div class="bg-cl-away"></div>
+							</div>
+						</div>
+
+						<div class="tyle-odds">
+							<div class="title-odds">ODDS:</div>
+							<div class="odds-item odds-home">
+								<span class="text-right">{{ cards_2_3.home_odds }}</span>
+								<span>HOME</span>
+							</div>
+							<div class="odds-item odds-draw">
+								<span class="text-right">{{ cards_2_3.draw_odds }}</span>
+								<span>DRAW</span>
+							</div>
+							<div class="odds-item odds-away">
+								<span class="text-right">{{ cards_2_3.away_odds }}</span>
+								<span>AWAY</span>
+							</div>
+						</div>
+					</div>
+					<!-- End Semilar 3 -->
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php
+	$ajax_url =  admin_url('admin-ajax.php').'?action=CrawToolCrm&controller=Shortcodes';
+?>
+<script type="text/javascript">
+    var app_shortcode_filter_detail = new Vue({
+		el: '#app_shortcode_filter_detail',
+      	data: {
+	      	item 	  		: null,
+	      	semilars 	  	: null,
+	      	cards_0 	  	: null,
+	      	cards_0_0 	  	: null,
+	      	cards_0_1 	  	: null,
+	      	cards_0_2 	  	: null,
+	      	cards_0_3 	  	: null,
+	      	cards_0_4 	  	: null,
+	      	cards_0_5 	  	: null,
+	      	cards_0_6 	  	: null,
+	      	cards_0_7 	  	: null,
+	      	cards_1 	  	: null,
+	      	cards_1_0 	  	: null,
+	      	cards_1_1 	  	: null,
+	      	cards_1_2 	  	: null,
+	      	cards_1_3 	  	: null,
+	      	cards_1_4 	  	: null,
+	      	cards_1_5 	  	: null,
+	      	cards_1_6 	  	: null,
+	      	cards_2_0 	  	: null,
+	      	cards_2_1 	  	: null,
+	      	cards_2_2 	  	: null,
+	      	cards_2_3 	  	: null,
+	      	isRunning 		: false,
+	      	ajax_url  		: '<?= $ajax_url; ?>',
+	      	match_id  		: '<?= $match_id; ?>'
+      	},
+      	methods: {
+      		get_game_class( result ){
+      			if( result == 'D' ){
+      				return 'draw-game';
+      			}else if( result == 'L' ){
+      				return 'lose-game';
+      			}else if( result == 'W' ){
+      				return 'win-game';
+      			}else{
+      				return 'ns-game';
+      			}
+      		},
+      		get_item(){
+          		this.isRunning = true;
+          		axios
+	          	.get(this.ajax_url+'&task=get_filter_detail&match_id='+this.match_id)
+	          	.then( response => {
+	          		this.item  		= response.data.item;
+	          		this.semilars  	= response.data.semilars;
+	          		this.cards_0  	= this.item.cards[0].cards;
+	          		for( let i = 0; i < this.cards_0.length; i++ ){
+	          			this.get_card( this.cards_0[i].id,'cards_0_'+i , this.cards_0[i].type);
+	          		}
+	          		this.cards_1  = this.item.cards[1].cards;
+	          		for( let j = 0; j < this.cards_1.length; j++ ){
+	          			this.get_card( this.cards_1[j].id,'cards_1_'+j , this.cards_1[j].type);
+	          		}
+
+	          		for( let k = 0; k < this.semilars.cards.length; k++ ){
+	          			this.get_card( this.semilars.cards[k].id,'cards_2_'+k , this.semilars.cards[k].type);
+	          		}
+	            	this.isRunning = false;
+	          	})
+	        },
+	        get_card(card_id,obj,type){
+	        	
+	        	let final_url = this.ajax_url+'&task=get_card_detail&card_id='+card_id;
+	        	if( type == 'leaguetablepoint' ){
+	        		final_url = this.ajax_url+'&task=get_card_league_table&card_id='+card_id;
+	        	}
+	        	
+	        	axios
+	          	.get(final_url)
+	          	.then( response => {
+	          		let the_response = response.data.item;
+	          		if( typeof the_response.error != 'undefined' ){
+	          			the_response = null;
+	          		}
+	          		switch(obj){
+	          			case 'cards_0_0':
+	          				this.cards_0_0 = the_response;
+	          				break;
+	          			case 'cards_0_1':
+	          				this.cards_0_1 = the_response;
+	          				break;
+	          			case 'cards_0_2':
+	          				this.cards_0_2 = the_response;
+	          				break;
+	          			case 'cards_0_3':
+	          				this.cards_0_3 = the_response;
+	          				break;
+	          			case 'cards_0_4':
+	          				this.cards_0_4 = the_response;
+	          				break;
+	          			case 'cards_0_5':
+	          				this.cards_0_5 = the_response;
+	          				break;
+	          			case 'cards_0_6':
+	          				this.cards_0_6 = the_response;
+	          				break;
+	          			case 'cards_0_7':
+	          				this.cards_0_7 = the_response;
+	          				break;
+	          			case 'cards_1_0':
+	          				this.cards_1_0 = the_response;
+	          				break;
+	          			case 'cards_1_1':
+	          				this.cards_1_1 = the_response;
+	          				break;
+	          			case 'cards_1_2':
+	          				this.cards_1_2 = the_response;
+	          				break;
+	          			case 'cards_1_3':
+	          				this.cards_1_3 = the_response;
+	          				break;
+	          			case 'cards_1_4':
+	          				this.cards_1_4 = the_response;
+	          				break;
+	          			case 'cards_1_5':
+	          				this.cards_1_5 = the_response;
+	          				break;
+	          			case 'cards_1_6':
+	          				this.cards_1_6 = the_response;
+	          				break;
+	          			case 'cards_2_0':
+	          				this.cards_2_0 = the_response;
+	          				break;
+	          			case 'cards_2_1':
+	          				this.cards_2_1 = the_response;
+	          				break;
+	          			case 'cards_2_2':
+	          				this.cards_2_2 = the_response;
+	          				break;
+	          			case 'cards_2_3':
+	          				this.cards_2_3 = the_response;
+	          				break;
+	          		}
+	          	})
+	        },
+	        app_format_date(date){
+	        	let today = new Date(date);
+	        	let dd = String(today.getDate()).padStart(2, '0');
+				let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+				let yyyy = today.getFullYear();
+				today = mm + '/' + dd + '/' + yyyy;
+	        	return today;
+	        }
+      	},
+      	mounted () {
+	      	this.get_item();
+	      	//this.get_card( card_id );
+      	}
+    });
+</script>

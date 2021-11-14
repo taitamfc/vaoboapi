@@ -12,16 +12,28 @@ class MayTinhDuDoanModel extends BaseModel
     /* MODEL */
     public function getAll(){
     	$cols = [];
+        //$this->_db->where('hw_odd','-','!=');
+        $this->_db->where('game_date',date('Y-m-d H:i:s'),'>=');
+        $this->_db->orderBy('game_date','ASC');
 		$items = $this->_db->ObjectBuilder()->get ($this->_table,null,$cols);
         foreach ($items as $item) {
-            $item->cards = json_decode($item->cards);
+            $item->cards        = json_decode($item->cards);            
         }
 		return $items;	
     }
+    public function findByMatchId($match_id){
+    	$this->_db->where ('system_id', $match_id);
+        $item = $this->_db->ObjectBuilder()->getOne($this->_table);
+		$item->cards        = json_decode($item->cards);       
+        return $item;
+    }
     public function saveAll($items){
+
     	foreach ($items as $data) {
+
             $data = (array)$data;
             $data['system_id'] = $data['id'];
+            $data['game_date'] = $this->_converZTTime($data['game_date']);
             $e = $this->_getItemBySourceId($data['id']);
 
             unset($data['id']);
@@ -31,6 +43,16 @@ class MayTinhDuDoanModel extends BaseModel
                 $this->store($data);
             }
     	}
+    }
+
+    private function _converZTTime($time){
+        //$time = str_replace('T',' ',$time);
+        //$time = str_replace('.000Z','',$time);
+        $time = date_create($time);
+        $time = date_format($time, 'Y-m-d H:i:s');
+        $time = date('Y-m-d H:i:s', strtotime($time) + $this->_add_time);
+        
+        return $time;
     }
 
     private function _getItemBySourceId($id){
@@ -54,6 +76,7 @@ class MayTinhDuDoanModel extends BaseModel
     public function apiGetDetail( $link = '' ){
     	if( !$link ){
             $this->_db->where('crawled',0);
+            $this->_db->where('hw_odd','-','!=');
             $item   = $this->_db->ObjectBuilder()->getOne($this->_table);
             $link   = $item->l_alias.'/'.$item->ht_alias.'_vs_'.$item->at_alias;
         }
